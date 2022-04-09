@@ -12,30 +12,51 @@ class CropViewController: UIViewController {
     let rectView = UIView()
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
+    let scrollView = UIScrollView()
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
-        view.addSubview(imageView)
-        view.addSubview(rectView)
         title = "编辑"
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(back))
+        configureRectView()
+        configureScrollView()
+        configureImageView()
+//        let constraints = [
+//            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 3 / 5),
+//            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+//        ]
+//        view.addConstraints(constraints)
+
+    }
+    func configureScrollView() {
+        view.addSubview(scrollView)
+        scrollView.isScrollEnabled = true
+//        scrollView.bouncesZoom = true
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 2
+        scrollView.contentSize = CGSize(width: screenWidth, height: screenWidth * 2)
+        scrollView.frame.size = CGSize(width: screenWidth, height: screenWidth)
+        scrollView.center = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+        print("asd")
+    }
+    func configureImageView() {
+        scrollView.addSubview(imageView)
+        imageView.image = UIImage(named: "ezrealloadscreen")
+        imageView.frame.size = CGSize(width: screenWidth, height: screenHeight)
+        imageView.center = CGPoint(x: screenWidth / 2, y: screenWidth / 2)
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "book.closed")
-        
+    }
+    func configureRectView() {
+        view.addSubview(rectView)
         rectView.frame.size = CGSize(width: screenWidth, height: screenWidth)
         rectView.center = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         rectView.swiftDrawBoardDottedLine(width: 3, lenth: 3, space: 3, cornerRadius: 3, color: .black)
-        let constraints = [
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 3 / 5),
-            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ]
-        view.addConstraints(constraints)
-
+        rectView.backgroundColor = .clear
     }
     
     @objc func back() {
@@ -44,7 +65,9 @@ class CropViewController: UIViewController {
 }
 
 extension CropViewController: UIScrollViewDelegate {
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        print("ASD")
         return imageView
     }
 }
