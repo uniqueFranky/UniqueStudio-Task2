@@ -82,9 +82,8 @@ class CropViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("CropViewDidAppear")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 //        print("!@#!@#", scrollView.contentScaleFactor, imageView.frame.size, scrollView.contentOffset, scrollView.contentSize, imageView.image?.size)
         if imageView.image!.size.width >= imageView.image!.size.height {
             let ratio = imageView.image!.size.width / imageView.image!.size.height
