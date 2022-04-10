@@ -17,9 +17,9 @@ class CropViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        view.backgroundColor = .white
         title = "编辑"
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(back))
+        view.backgroundColor = .clear
         configureRectView()
         configureScrollView()
         configureImageView()
@@ -39,17 +39,18 @@ class CropViewController: UIViewController {
         scrollView.delegate = self
         scrollView.minimumZoomScale = 1
         scrollView.maximumZoomScale = 2
-        scrollView.contentSize = CGSize(width: screenWidth, height: screenWidth * 2)
+        scrollView.contentSize = CGSize(width: screenWidth, height: screenHeight)
         scrollView.frame.size = CGSize(width: screenWidth, height: screenWidth)
         scrollView.center = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+        scrollView.contentOffset = CGPoint(x: 0, y: screenHeight / 4)
         print("asd")
     }
     func configureImageView() {
         scrollView.addSubview(imageView)
         imageView.image = UIImage(named: "ezrealloadscreen")
         imageView.frame.size = CGSize(width: screenWidth, height: screenHeight)
-        imageView.center = CGPoint(x: screenWidth / 2, y: screenWidth / 2)
-        imageView.contentMode = .scaleAspectFit
+//        imageView.center = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+        imageView.contentMode = .scaleAspectFill
     }
     func configureRectView() {
         view.addSubview(rectView)
