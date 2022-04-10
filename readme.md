@@ -1,6 +1,8 @@
 #UniqueStudio Task2
+
 ##2022.4.9
  * 确定了一下思路
+
 ##2022.4.10
  * 在present的时候遇到了不少的问题，比如present似乎有一个延迟，在执行完present后面的语句以后才会显示新的页面。
  * 本来没打算把Picker写成一个ViewController的，但是发现Delegate必须是NSObject，所以就先把Picker写成ViewController，之后再想办法改一改
