@@ -11,20 +11,33 @@ class ImagePicker: UIViewController {
     let uiImagePickerController = UIImagePickerController()
     var slcImage = UIImage()
     var rootViewController = UIViewController()
-    
-    func setup(_rootViewController: UIViewController) {
+    var userCancelled = false
+    var failReason = PickingError.noError
+    func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType) {
         rootViewController = _rootViewController
         slcImage = UIImage()
         uiImagePickerController.delegate = self
+        uiImagePickerController.sourceType = mode
+        rootViewController.present(self, animated: true)
+        try! takeFromCamera()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fatalError("viewDidLoad Should not Be Called")
+//        fatalError("viewDidLoad Should not Be Called")
+        print("pickerView didLoad")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("pickerView didAppear")
+
     }
     
     enum PickingError: Error {
+        case noError
         case cameraNotAvailable
+        case userCancelled
     }
     
     func pickFromLib() throws {
@@ -33,30 +46,38 @@ class ImagePicker: UIViewController {
     
     func takeFromCamera() throws {
         print("From Camera")
-        
+        failReason = PickingError.noError
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            didFinishSelecting()
+            failReason = PickingError.cameraNotAvailable
             return
-//            throw PickingError.cameraNotAvailable
         }
-        
+        userCancelled = false
         uiImagePickerController.sourceType = .camera
         uiImagePickerController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        rootViewController.present(uiImagePickerController, animated: true)
+        present(uiImagePickerController, animated: true)
+
     }
     
     func retrieveImage() -> UIImage {
-        return slcImage
+        if failReason != PickingError.noError {
+            print("Failed to get image")
+            return UIImage()
+        } else {
+            return slcImage
+        }
     }
     
     func didFinishSelecting() {
-        rootViewController.dismiss(animated: true)
+       
+        dismiss(animated: true)
         let cvc = CropViewController()
+        cvc.setupImageView(image: slcImage)
         let navi = UINavigationController(rootViewController: cvc)
         navi.modalPresentationStyle = .fullScreen
-        rootViewController.present(navi, animated: true)
-//        cvc.modalPresentationStyle = .fullScreen
-//        rootViewController.present(cvc, animated: true)
+        
+        //TODO: 这里要先dissmis，再present，研究一下为什么
+        dismiss(animated: true)
+        present(navi, animated: true)
     }
 }
 
@@ -64,11 +85,19 @@ class ImagePicker: UIViewController {
 extension ImagePicker: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            print("No Available Image")
             return
         }
-        
+        print("Finish Taking")
         slcImage = image
         didFinishSelecting()
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+        dismiss(animated: true)
+        print("cancelled")
+        failReason = PickingError.userCancelled
     }
 }
 

@@ -40,17 +40,27 @@ class ViewController: UIViewController, UIActionSheetDelegate {
     func pickFromLib(paramAction: UIAlertAction) {
         
     }
-    
+//    func takeFromCamera1(paramAction: UIAlertAction) {
+//        print("Before 1")
+//        takeFromCamera(paramAction: paramAction)
+//        print("After 1")
+//    }
     func takeFromCamera(paramAction: UIAlertAction) {
         let picker = ImagePicker()
-        picker.setup(_rootViewController: self)
-        do {
-            try picker.takeFromCamera()
-        } catch {
-            print(error)
-        }
+        
+        picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera)
+//        present(picker, animated: true)
+        print("return to rootViewController")
+        funcAfterReturning()
     }
     
-
+    func funcAfterReturning() {
+        print("funcAfterReturning")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("rootViewDidAppear")
+    }
 }
 
