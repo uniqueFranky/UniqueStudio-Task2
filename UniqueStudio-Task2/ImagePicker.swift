@@ -17,9 +17,8 @@ class ImagePicker: UIViewController {
         rootViewController = _rootViewController
         slcImage = UIImage()
         uiImagePickerController.delegate = self
-        uiImagePickerController.sourceType = mode
         rootViewController.present(self, animated: true)
-        try! takeFromCamera()
+        takeFromCamera()
     }
     
     override func viewDidLoad() {
@@ -44,11 +43,12 @@ class ImagePicker: UIViewController {
         print("From Lib")
     }
     
-    func takeFromCamera() throws {
+    func takeFromCamera() {
         print("From Camera")
         failReason = PickingError.noError
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             failReason = PickingError.cameraNotAvailable
+            dismiss(animated: true)
             return
         }
         userCancelled = false
