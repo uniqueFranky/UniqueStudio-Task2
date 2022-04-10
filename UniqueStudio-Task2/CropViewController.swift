@@ -15,34 +15,31 @@ class CropViewController: UIViewController {
     let scrollView = UIScrollView()
     let upperRectView = UIView()
     let lowerRectView = UIView()
+    var fatherPicker = ImagePicker()
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        title = "编辑"
+        title = "裁剪"
+        view.backgroundColor = .black
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(back))
-        view.backgroundColor = .clear
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
         configureMidRectView()
         configureScrollView()
         configureImageView()
         configureBoundRectView()
-//        let constraints = [
-//            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 3 / 5),
-//            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-//        ]
-//        view.addConstraints(constraints)
-
     }
+    
+    func setupPicker(_ father: ImagePicker) {
+        fatherPicker = father
+    }
+    
     func configureScrollView() {
         view.addSubview(scrollView)
         scrollView.isScrollEnabled = true
-//        scrollView.bouncesZoom = true
         scrollView.delegate = self
         scrollView.minimumZoomScale = 1
         scrollView.maximumZoomScale = 2
-//        scrollView.frame.size = CGSize(width: screenWidth, height: screenHeight)
         scrollView.contentMode = .scaleAspectFill
         
         //MARK: !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -77,9 +74,25 @@ class CropViewController: UIViewController {
     func setupImageView(image: UIImage) {
         imageView.image = image
     }
-    
+    func cropImage(offset: CGPoint, ratio: Double) {
+        let image = imageView.image!.fixOrientation()
+        print("!!!!!!!!!", image.scale, image.imageOrientation.rawValue)
+        let cropRect = CGRect(x: offset.x * ratio, y: offset.y * ratio, width: screenWidth * ratio, height: screenWidth * ratio)
+        guard let cgImage = image.cgImage?.cropping(to: cropRect) else {
+            return
+        }
+        
+        fatherPicker.image = UIImage(cgImage: cgImage)
+
+    }
     @objc func back() {
         dismiss(animated: true)
+    }
+    
+    //TODO: Finish func Done
+    @objc func done() {
+        dismiss(animated: true)
+        cropImage(offset: scrollView.contentOffset, ratio: imageView.image!.size.width / imageView.frame.width)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,9 +113,9 @@ class CropViewController: UIViewController {
 
         scrollView.contentSize = imageView.frame.size
         if imageView.frame.size.width == screenWidth {
-            scrollView.contentOffset.y = imageView.frame.size.height / 8
+            scrollView.contentOffset.y = (imageView.frame.size.height - screenWidth) / 2
         } else {
-            scrollView.contentOffset.x = imageView.frame.size.width / 8
+            scrollView.contentOffset.x = (imageView.frame.size.width - screenWidth) / 2
         }
         print("SettingUp",scrollView.contentOffset)
 
@@ -117,6 +130,11 @@ extension CropViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print("AfterScroll",scrollView.contentOffset)
+        let ratio = imageView.image!.size.width / imageView.frame.width
+        print("xRatio:", imageView.image!.size.width / imageView.frame.width)
+        print("yRatio:", imageView.image!.size.height / imageView.frame.height)
+        print("x:", imageView.image!.size.width, "y:", imageView.image!.size.height)
+        print("calc:", (screenWidth + scrollView.contentOffset.y) * ratio)
 
     }
     
@@ -144,7 +162,7 @@ extension CropViewController: UIScrollViewDelegate {
 }
 
 
-//画虚线框
+/// 画虚线框
 extension UIView{
     func swiftDrawBoardDottedLine(width:CGFloat,lenth:CGFloat,space:CGFloat,cornerRadius:CGFloat,color:UIColor){
         self.layer.cornerRadius = cornerRadius
@@ -165,5 +183,71 @@ extension UIView{
         borderLayer.strokeColor = color.cgColor
         self.layer.addSublayer(borderLayer)
         
+    }
+}
+
+/// Extension to fix orientation of an UIImage without EXIF
+extension UIImage {
+
+    func fixOrientation() -> UIImage {
+
+        guard let cgImage = cgImage else { return self }
+
+        if imageOrientation == .up { return self }
+
+        var transform = CGAffineTransform.identity
+
+        switch imageOrientation {
+
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: size.width, y: size.height)
+            transform = transform.rotated(by: CGFloat(Double.pi))
+
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.rotated(by: CGFloat(Double.pi / 2))
+
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: size.height)
+            transform = transform.rotated(by: CGFloat(-Double.pi / 2))
+
+        case .up, .upMirrored:
+            break
+        }
+
+        switch imageOrientation {
+
+        case .upMirrored, .downMirrored:
+            transform.translatedBy(x: size.width, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+
+        case .leftMirrored, .rightMirrored:
+            transform.translatedBy(x: size.height, y: 0)
+            transform.scaledBy(x: -1, y: 1)
+
+        case .up, .down, .left, .right:
+            break
+        }
+
+        if let ctx = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: cgImage.colorSpace!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) {
+
+            ctx.concatenate(transform)
+
+            switch imageOrientation {
+
+            case .left, .leftMirrored, .right, .rightMirrored:
+                ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
+
+            default:
+                ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            }
+
+            if let finalImage = ctx.makeImage() {
+                return (UIImage(cgImage: finalImage))
+            }
+        }
+
+        // something failed -- return original
+        return self
     }
 }

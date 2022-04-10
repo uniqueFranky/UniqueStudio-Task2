@@ -8,28 +8,41 @@
 import UIKit
 
 class ViewController: UIViewController, UIActionSheetDelegate {
+    
+    //       ImagePicker
+    let picker = ImagePicker()
 
-    let btn = UIButton()
+    let imageView = UIImageView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         view.backgroundColor = .white
-        view.addSubview(btn)
-
-        btn.addTarget(self, action: #selector(showSheet), for: .touchUpInside)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("SelectPic", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
+        
+        configureBarButtonItem()
+        
+        configureImageView()
+    }
+    
+    func configureBarButtonItem() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(showSheet))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "显示选择的照片", style: .done, target: self, action: #selector(getImage))
+    }
+    
+    func configureImageView() {
+        view.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage()
+        imageView.contentMode = .scaleAspectFit
         let constraints = [
-            btn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btn.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            btn.widthAnchor.constraint(equalToConstant: 200),
-            btn.heightAnchor.constraint(equalToConstant: 50),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: view.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ]
         view.addConstraints(constraints)
     }
+    
     @objc func showSheet() {
-        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "从图库选择", style: UIAlertAction.Style.default, handler: pickFromLib))
         alertController.addAction(UIAlertAction(title: "用相机拍摄", style: UIAlertAction.Style.default, handler: takeFromCamera))
@@ -37,30 +50,23 @@ class ViewController: UIViewController, UIActionSheetDelegate {
         present(alertController, animated: true)
     }
     
+    @objc func getImage() {
+        do {
+            try imageView.image = picker.retrieveImage()
+        } catch {
+            let alert = UIAlertController(title: "未能成功获取照片", message: "失败原因：\(error)", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            present(alert, animated: true)
+        }
+    }
+    
     func pickFromLib(paramAction: UIAlertAction) {
         
     }
-//    func takeFromCamera1(paramAction: UIAlertAction) {
-//        print("Before 1")
-//        takeFromCamera(paramAction: paramAction)
-//        print("After 1")
-//    }
+
     func takeFromCamera(paramAction: UIAlertAction) {
-        let picker = ImagePicker()
-        
         picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera)
-//        present(picker, animated: true)
-        print("return to rootViewController")
-        funcAfterReturning()
     }
     
-    func funcAfterReturning() {
-        print("funcAfterReturning")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("rootViewDidAppear")
-    }
 }
 
