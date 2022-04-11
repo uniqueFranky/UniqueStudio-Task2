@@ -89,7 +89,6 @@ class CropViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    //TODO: Finish func Done
     @objc func done() {
         dismiss(animated: true)
         cropImage(offset: scrollView.contentOffset, ratio: imageView.image!.size.width / imageView.frame.width)

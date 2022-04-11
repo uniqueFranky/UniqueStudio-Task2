@@ -61,7 +61,6 @@ class ImagePicker: UIViewController {
     
     func didFinishSelecting() {
        
-        rootViewController.dismiss(animated: true)
         let cvc = CropViewController()
         cvc.setupImageView(image: image)
         cvc.setupPicker(self)
@@ -75,6 +74,7 @@ class ImagePicker: UIViewController {
 
 extension ImagePicker: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        rootViewController.dismiss(animated: true)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             print("No Available Image")
             return

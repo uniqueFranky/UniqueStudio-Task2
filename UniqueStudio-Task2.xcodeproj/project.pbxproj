@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3158A7E92801B24F00C255A4 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3158A7E82801B24F00C255A4 /* ImagePicker.swift */; };
 		3158A7EB2801BEF900C255A4 /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3158A7EA2801BEF900C255A4 /* CropViewController.swift */; };
+		3158A81D28043FAB00C255A4 /* LibraryBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3158A81C28043FAB00C255A4 /* LibraryBrowserViewController.swift */; };
 		316ABB0B2801AF570030A3D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316ABB0A2801AF570030A3D9 /* AppDelegate.swift */; };
 		316ABB0D2801AF570030A3D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316ABB0C2801AF570030A3D9 /* SceneDelegate.swift */; };
 		316ABB0F2801AF570030A3D9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 316ABB0E2801AF570030A3D9 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		3158A7E82801B24F00C255A4 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		3158A7EA2801BEF900C255A4 /* CropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
+		3158A81C28043FAB00C255A4 /* LibraryBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryBrowserViewController.swift; sourceTree = "<group>"; };
 		316ABB072801AF570030A3D9 /* UniqueStudio-Task2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UniqueStudio-Task2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		316ABB0A2801AF570030A3D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		316ABB0C2801AF570030A3D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 			children = (
 				3158A7E82801B24F00C255A4 /* ImagePicker.swift */,
 				3158A7EA2801BEF900C255A4 /* CropViewController.swift */,
+				3158A81C28043FAB00C255A4 /* LibraryBrowserViewController.swift */,
 			);
 			name = ImagePicker;
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 				3158A7E92801B24F00C255A4 /* ImagePicker.swift in Sources */,
 				316ABB0B2801AF570030A3D9 /* AppDelegate.swift in Sources */,
 				316ABB0D2801AF570030A3D9 /* SceneDelegate.swift in Sources */,
+				3158A81D28043FAB00C255A4 /* LibraryBrowserViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +292,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = top.uniqueFranky.WhatRubbishDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = top.uniqueFranky.ImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -315,7 +319,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = top.uniqueFranky.WhatRubbishDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = top.uniqueFranky.ImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
