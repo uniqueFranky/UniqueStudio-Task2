@@ -13,3 +13,4 @@
 ## 2022.4.11
  * 今天突然发现可以不用present ImagePicker
  * 之前的延迟问题好像可以用delegate解决，裁剪完成后直接调用delegate的方法就行了。这个打算等到写完从图库选择照片以后再重构一下。
+ * 看了点PhotoKit的doc
