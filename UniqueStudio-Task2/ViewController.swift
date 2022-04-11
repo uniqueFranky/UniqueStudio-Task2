@@ -66,6 +66,7 @@ class ViewController: UIViewController, UIActionSheetDelegate {
 
     func takeFromCamera(paramAction: UIAlertAction) {
         picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera)
+        getImage()
     }
     
 }

@@ -26,7 +26,7 @@ class ImagePicker: UIViewController {
         rootViewController = _rootViewController
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self
-        rootViewController.present(self, animated: true)
+//        rootViewController.present(self, animated: true)
         takeFromCamera()
     }
     
@@ -41,12 +41,12 @@ class ImagePicker: UIViewController {
         failReason = PickingError.noError
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             failReason = PickingError.cameraNotAvailable
-            dismiss(animated: true)
+//            dismiss(animated: true)
             return
         }
         uiImagePickerController.sourceType = .camera
         uiImagePickerController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        present(uiImagePickerController, animated: true)
+        rootViewController.present(uiImagePickerController, animated: true)
 
     }
     
@@ -61,16 +61,14 @@ class ImagePicker: UIViewController {
     
     func didFinishSelecting() {
        
-        dismiss(animated: true)
+        rootViewController.dismiss(animated: true)
         let cvc = CropViewController()
         cvc.setupImageView(image: image)
         cvc.setupPicker(self)
         let navi = UINavigationController(rootViewController: cvc)
         navi.modalPresentationStyle = .fullScreen
         
-        //TODO: 这里要先dissmis，再present，研究一下为什么
-        dismiss(animated: true)
-        present(navi, animated: true)
+        rootViewController.present(navi, animated: true)
     }
 }
 
@@ -87,8 +85,7 @@ extension ImagePicker: UIImagePickerControllerDelegate {
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true)
-        dismiss(animated: true)
+        rootViewController.dismiss(animated: true)
         print("cancelled")
         failReason = PickingError.userCancelled
     }
