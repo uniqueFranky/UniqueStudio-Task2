@@ -13,7 +13,7 @@ class ImagePicker: UIViewController {
     let uiImagePickerController = UIImagePickerController()
     var image = UIImage()
     var rootViewController = UIViewController()
-    var failReason = PickingError.noError
+    var failReason = PickingError.invalidImage
     
     enum PickingError: Error {
         case noError

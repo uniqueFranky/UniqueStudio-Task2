@@ -56,6 +56,7 @@ class ViewController: UIViewController, UIActionSheetDelegate {
         } catch {
             let alert = UIAlertController(title: "未能成功获取照片", message: "失败原因：\(error)", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            present(alert, animated: true)
         }
     }
     
