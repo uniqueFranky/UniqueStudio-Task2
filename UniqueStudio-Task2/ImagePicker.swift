@@ -14,7 +14,9 @@ class ImagePicker: UIViewController {
     var image = UIImage()
     var rootViewController = UIViewController()
     var failReason = PickingError.invalidImage
-    
+    var callBack: () -> Void = {
+        
+    }
     enum PickingError: Error {
         case noError
         case cameraNotAvailable
@@ -25,10 +27,11 @@ class ImagePicker: UIViewController {
         case invalidSize
     }
     
-    func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType) {
+    func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
         rootViewController = _rootViewController
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self
+        self.callBack = callBack
 //        rootViewController.present(self, animated: true)
         if mode == .camera {
             takeFromCamera()

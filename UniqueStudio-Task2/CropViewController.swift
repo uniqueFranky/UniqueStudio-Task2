@@ -76,14 +76,13 @@ class CropViewController: UIViewController {
     }
     func cropImage(offset: CGPoint, ratio: Double) {
         let image = imageView.image!.fixOrientation()
-        print("!!!!!!!!!", image.scale, image.imageOrientation.rawValue)
         let cropRect = CGRect(x: offset.x * ratio, y: offset.y * ratio, width: screenWidth * ratio, height: screenWidth * ratio)
         guard let cgImage = image.cgImage?.cropping(to: cropRect) else {
             return
         }
         
         fatherPicker.image = UIImage(cgImage: cgImage)
-
+        fatherPicker.callBack()
     }
     @objc func back() {
         dismiss(animated: true)
@@ -96,10 +95,8 @@ class CropViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        print("!@#!@#", scrollView.contentScaleFactor, imageView.frame.size, scrollView.contentOffset, scrollView.contentSize, imageView.image?.size)
         if imageView.image!.size.width >= imageView.image!.size.height {
             let ratio = imageView.image!.size.width / imageView.image!.size.height
-            print("!@#!@#!@#!@#!@", imageView.image!.size.width, imageView.image!.size.height)
             imageView.frame.size = CGSize(width: screenWidth * ratio, height: screenWidth)
         } else {
             let ratio = imageView.image!.size.height / imageView.image!.size.width
@@ -107,7 +104,6 @@ class CropViewController: UIViewController {
         }
 
         scrollView.contentSize = imageView.frame.size
-//        scrollView.frame.size = imageView.frame.size
         scrollView.frame.size = CGSize(width: screenWidth, height: screenWidth)
         scrollView.center = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
 
@@ -117,7 +113,6 @@ class CropViewController: UIViewController {
         } else {
             scrollView.contentOffset.x = (imageView.frame.size.width - screenWidth) / 2
         }
-        print("SettingUp",scrollView.contentOffset)
 
     }
 }

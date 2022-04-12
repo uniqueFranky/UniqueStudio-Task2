@@ -49,7 +49,7 @@ class ViewController: UIViewController, UIActionSheetDelegate {
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertAction.Style.cancel))
         present(alertController, animated: true)
     }
-    
+
     @objc func getImage() {
         do {
             try imageView.image = picker.retrieveImage()
@@ -61,11 +61,14 @@ class ViewController: UIViewController, UIActionSheetDelegate {
     }
     
     func pickFromLib(paramAction: UIAlertAction) {
-        picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.photoLibrary)
+        picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.photoLibrary, callBack: {
+            self.getImage()
+        })
     }
-
     func takeFromCamera(paramAction: UIAlertAction) {
-        picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera)
+        picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera, callBack: {
+            self.getImage()
+        })
     }
     
 }
