@@ -107,7 +107,6 @@ class LibraryBrowserViewController: UICollectionViewController {
 //            }
 //            self.refetchAssets()
 //        })
-        PHPhotoLibrary.shared()
     }
     @objc func hideAuthBtn() {
         authBtn.isHidden = true

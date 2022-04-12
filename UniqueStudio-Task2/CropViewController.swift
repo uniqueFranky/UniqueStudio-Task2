@@ -125,15 +125,6 @@ extension CropViewController: UIScrollViewDelegate {
         return imageView
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("AfterScroll",scrollView.contentOffset)
-        let ratio = imageView.image!.size.width / imageView.frame.width
-        print("xRatio:", imageView.image!.size.width / imageView.frame.width)
-        print("yRatio:", imageView.image!.size.height / imageView.frame.height)
-        print("x:", imageView.image!.size.width, "y:", imageView.image!.size.height)
-        print("calc:", (screenWidth + scrollView.contentOffset.y) * ratio)
-
-    }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         upperRectView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
@@ -148,13 +139,8 @@ extension CropViewController: UIScrollViewDelegate {
         lowerRectView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("endDragging")
         upperRectView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
         lowerRectView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
-    }
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        print("zoomed")
-
     }
 }
 

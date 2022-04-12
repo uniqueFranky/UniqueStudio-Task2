@@ -113,6 +113,7 @@ extension ImagePicker: UIImagePickerControllerDelegate {
         rootViewController.dismiss(animated: true)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             print("No Available Image")
+            failReason = .invalidImage
             callBack()
             return
         }
