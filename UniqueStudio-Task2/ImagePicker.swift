@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 import CloudKit
+import Photos
 
 class ImagePicker: UIViewController {
     let uiImagePickerController = UIImagePickerController()
     var image = UIImage()
     var rootViewController = UIViewController()
+    var authStatus: PHAuthorizationStatus!
     var failReason = PickingError.invalidImage
     var callBack: () -> Void = {
         
@@ -26,6 +28,7 @@ class ImagePicker: UIViewController {
         case invalidDir
         case invalidSize
         case uncroppedImage
+        case accessDenied
     }
     
     func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
@@ -33,6 +36,14 @@ class ImagePicker: UIViewController {
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self
         self.callBack = callBack
+        authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        if authStatus == .denied {
+            print("!!Denied!!")
+            failReason = .accessDenied
+            callBack()
+        } else if authStatus == .limited {
+            print("Limited")
+        }
 //        rootViewController.present(self, animated: true)
         if mode == .camera {
             takeFromCamera()

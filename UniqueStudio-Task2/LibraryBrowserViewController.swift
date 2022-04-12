@@ -17,6 +17,8 @@ class LibraryBrowserViewController: UICollectionViewController {
     var nowIndexPath: IndexPath!
     let tableView = UITableView()
     let btn = UIButton()
+    let authBtn = UIButton()
+    let cancelBtn = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,11 +29,12 @@ class LibraryBrowserViewController: UICollectionViewController {
         allPhotos = PHAsset.fetchAssets(with: option)
         usrCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(back))
+        configureAuthBtn()
         configureBtn()
+        configureCancelBtn()
         configureTableView()
         configureCollectionView()
         configureConstraints()
-//        PHPhotoLibrary.shared().register(self)
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +42,11 @@ class LibraryBrowserViewController: UICollectionViewController {
         option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         allPhotos = PHAsset.fetchAssets(with: option)
         usrCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+        
+        if fatherPicker.authStatus == .limited {
+            authBtn.isHidden = false
+            cancelBtn.isHidden = false
+        }
     }
     @objc func back() {
         dismiss(animated: true)
@@ -63,7 +71,14 @@ class LibraryBrowserViewController: UICollectionViewController {
     func setPicker(picker: ImagePicker) {
         fatherPicker = picker
     }
-    
+    func configureAuthBtn() {
+        view.addSubview(authBtn)
+        authBtn.translatesAutoresizingMaskIntoConstraints = false
+        authBtn.setTitle("相册访问被限制，点击更改相册访问权限", for: .normal)
+        authBtn.setTitleColor(.black, for: .normal)
+        authBtn.titleLabel?.lineBreakMode = .byCharWrapping
+        authBtn.addTarget(self, action: #selector(requestAuth), for: .touchUpInside)
+    }
     func configureBtn() {
         view.addSubview(btn)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -71,11 +86,33 @@ class LibraryBrowserViewController: UICollectionViewController {
         btn.setTitleColor(.black, for: .normal)
         btn.addTarget(self, action: #selector(dropDown), for: .touchUpInside)
     }
+    func configureCancelBtn() {
+        view.addSubview(cancelBtn)
+        cancelBtn.translatesAutoresizingMaskIntoConstraints = false
+        cancelBtn.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        cancelBtn.addTarget(self, action: #selector(hideAuthBtn), for: .touchUpInside)
+    }
     
     @objc func dropDown() {
         tableView.isHidden = !tableView.isHidden
     }
     
+    @objc func requestAuth() {
+        print("req")
+//        PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { status in
+//            print(status.rawValue)
+//            self.fatherPicker.authStatus = status
+//            if status == .authorized {
+//                self.hideAuthBtn()
+//            }
+//            self.refetchAssets()
+//        })
+        PHPhotoLibrary.shared()
+    }
+    @objc func hideAuthBtn() {
+        authBtn.isHidden = true
+        cancelBtn.isHidden = true
+    }
     func configureTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
@@ -100,7 +137,17 @@ class LibraryBrowserViewController: UICollectionViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             collectionView.topAnchor.constraint(equalTo: btn.bottomAnchor, constant: 20),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            
+            authBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            authBtn.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 4 / 5),
+            authBtn.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -30),
+            authBtn.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            
+            cancelBtn.leadingAnchor.constraint(equalTo: authBtn.trailingAnchor),
+            cancelBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            cancelBtn.topAnchor.constraint(equalTo: authBtn.topAnchor),
+            cancelBtn.bottomAnchor.constraint(equalTo: authBtn.bottomAnchor),
         ]
         view.addConstraints(constraints)
     }
