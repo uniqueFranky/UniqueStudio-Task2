@@ -18,8 +18,11 @@ class ImagePicker: UIViewController {
     enum PickingError: Error {
         case noError
         case cameraNotAvailable
+        case libraryNotAvailable
         case userCancelled
         case invalidImage
+        case invalidDir
+        case invalidSize
     }
     
     func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType) {
@@ -27,13 +30,28 @@ class ImagePicker: UIViewController {
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self
 //        rootViewController.present(self, animated: true)
-        takeFromCamera()
+        if mode == .camera {
+            takeFromCamera()
+        } else {
+            pickFromLib()
+        }
     }
     
 
     
-    func pickFromLib() throws {
+    func pickFromLib()  {
         print("From Lib")
+        failReason = PickingError.noError
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
+            failReason = PickingError.libraryNotAvailable
+            return
+        }
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: 80, height: 80)
+        let lbvc = LibraryBrowserViewController(collectionViewLayout: layout)
+        lbvc.setPicker(picker: self)
+        rootViewController.present(lbvc, animated: true)
     }
     
     func takeFromCamera() {
@@ -63,7 +81,7 @@ class ImagePicker: UIViewController {
        
         let cvc = CropViewController()
         cvc.setupImageView(image: image)
-        cvc.setupPicker(self)
+        cvc.setPicker(self)
         let navi = UINavigationController(rootViewController: cvc)
         navi.modalPresentationStyle = .fullScreen
         

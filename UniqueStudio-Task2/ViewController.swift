@@ -61,12 +61,11 @@ class ViewController: UIViewController, UIActionSheetDelegate {
     }
     
     func pickFromLib(paramAction: UIAlertAction) {
-        
+        picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.photoLibrary)
     }
 
     func takeFromCamera(paramAction: UIAlertAction) {
         picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera)
-        getImage()
     }
     
 }

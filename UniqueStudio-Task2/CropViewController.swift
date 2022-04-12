@@ -30,7 +30,7 @@ class CropViewController: UIViewController {
         configureBoundRectView()
     }
     
-    func setupPicker(_ father: ImagePicker) {
+    func setPicker(_ father: ImagePicker) {
         fatherPicker = father
     }
     
