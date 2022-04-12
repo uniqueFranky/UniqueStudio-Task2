@@ -25,6 +25,7 @@ class ImagePicker: UIViewController {
         case invalidImage
         case invalidDir
         case invalidSize
+        case uncroppedImage
     }
     
     func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
@@ -47,6 +48,7 @@ class ImagePicker: UIViewController {
         failReason = PickingError.noError
         guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
             failReason = PickingError.libraryNotAvailable
+            callBack()
             return
         }
         let layout = UICollectionViewFlowLayout()
@@ -54,7 +56,9 @@ class ImagePicker: UIViewController {
         layout.itemSize = CGSize(width: 80, height: 80)
         let lbvc = LibraryBrowserViewController(collectionViewLayout: layout)
         lbvc.setPicker(picker: self)
-        rootViewController.present(lbvc, animated: true)
+        let navi = UINavigationController(rootViewController: lbvc)
+        navi.modalPresentationStyle = .fullScreen
+        rootViewController.present(navi, animated: true)
     }
     
     func takeFromCamera() {
@@ -62,6 +66,7 @@ class ImagePicker: UIViewController {
         failReason = PickingError.noError
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             failReason = PickingError.cameraNotAvailable
+            callBack()
             return
         }
         uiImagePickerController.sourceType = .camera
@@ -97,6 +102,7 @@ extension ImagePicker: UIImagePickerControllerDelegate {
         rootViewController.dismiss(animated: true)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             print("No Available Image")
+            callBack()
             return
         }
         print("Finish Taking")
@@ -108,6 +114,7 @@ extension ImagePicker: UIImagePickerControllerDelegate {
         rootViewController.dismiss(animated: true)
         print("cancelled")
         failReason = PickingError.userCancelled
+        callBack()
     }
 }
 

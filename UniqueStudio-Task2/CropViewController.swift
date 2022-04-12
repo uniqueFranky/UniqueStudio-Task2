@@ -86,6 +86,8 @@ class CropViewController: UIViewController {
     }
     @objc func back() {
         dismiss(animated: true)
+        fatherPicker.failReason = .uncroppedImage
+        fatherPicker.callBack()
     }
     
     @objc func done() {

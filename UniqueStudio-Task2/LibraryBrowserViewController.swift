@@ -26,6 +26,7 @@ class LibraryBrowserViewController: UICollectionViewController {
         option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         allPhotos = PHAsset.fetchAssets(with: option)
         usrCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(back))
         configureBtn()
         configureTableView()
         configureCollectionView()
@@ -38,6 +39,11 @@ class LibraryBrowserViewController: UICollectionViewController {
         option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         allPhotos = PHAsset.fetchAssets(with: option)
         usrCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+    }
+    @objc func back() {
+        dismiss(animated: true)
+        fatherPicker.failReason = .userCancelled
+        fatherPicker.callBack()
     }
     func refetchAssets() {
         let option = PHFetchOptions()
