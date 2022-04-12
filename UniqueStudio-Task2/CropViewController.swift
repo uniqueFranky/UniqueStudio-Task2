@@ -99,6 +99,7 @@ class CropViewController: UIViewController {
 //        print("!@#!@#", scrollView.contentScaleFactor, imageView.frame.size, scrollView.contentOffset, scrollView.contentSize, imageView.image?.size)
         if imageView.image!.size.width >= imageView.image!.size.height {
             let ratio = imageView.image!.size.width / imageView.image!.size.height
+            print("!@#!@#!@#!@#!@", imageView.image!.size.width, imageView.image!.size.height)
             imageView.frame.size = CGSize(width: screenWidth * ratio, height: screenWidth)
         } else {
             let ratio = imageView.image!.size.height / imageView.image!.size.width

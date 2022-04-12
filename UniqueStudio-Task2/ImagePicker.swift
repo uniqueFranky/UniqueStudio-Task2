@@ -59,7 +59,6 @@ class ImagePicker: UIViewController {
         failReason = PickingError.noError
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             failReason = PickingError.cameraNotAvailable
-//            dismiss(animated: true)
             return
         }
         uiImagePickerController.sourceType = .camera

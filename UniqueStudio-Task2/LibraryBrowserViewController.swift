@@ -137,8 +137,15 @@ extension LibraryBrowserViewController {
             }
             self.fatherPicker.failReason = .noError
             self.fatherPicker.image = img
+            let cvc = CropViewController()
+            cvc.setupImageView(image: self.fatherPicker.image)
+            cvc.setPicker(self.fatherPicker)
+            let navi = UINavigationController(rootViewController: cvc)
+            navi.modalPresentationStyle = .fullScreen
+            self.dismiss(animated: true)
+            self.fatherPicker.rootViewController.present(navi, animated: true)
         })
-        dismiss(animated: true)
+
     }
 }
 
@@ -193,7 +200,6 @@ extension LibraryBrowserViewController: UITableViewDataSource {
         } else {
             cell.textLabel?.text = usrCollections.object(at: indexPath.item - 1).localizedTitle
         }
-        cell.isHidden = false
         return cell
     }
 }
