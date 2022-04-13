@@ -21,7 +21,7 @@ class CropViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         title = "裁剪"
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(back))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
         configureMidRectView()

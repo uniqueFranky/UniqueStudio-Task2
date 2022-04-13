@@ -7,6 +7,7 @@
 
 import UIKit
 import Photos
+import PhotosUI
 
 class LibraryBrowserViewController: UICollectionViewController {
 
@@ -15,6 +16,17 @@ class LibraryBrowserViewController: UICollectionViewController {
     var usrCollectionPhotos: PHFetchResult<PHAsset>!
     var usrCollections: PHFetchResult<PHCollection>!
     var nowIndexPath: IndexPath!
+    var authStatus: PHAuthorizationStatus! {
+        didSet {
+            if authStatus == .authorized {
+                hideAuthBtn()
+            } else {
+                showAuthBtn()
+            }
+            refetchAssets()
+            collectionView.reloadData()
+        }
+    }
     let tableView = UITableView()
     let btn = UIButton()
     let authBtn = UIButton()
@@ -38,16 +50,22 @@ class LibraryBrowserViewController: UICollectionViewController {
         
     }
     override func viewWillAppear(_ animated: Bool) {
-        let option = PHFetchOptions()
-        option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        allPhotos = PHAsset.fetchAssets(with: option)
-        usrCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
-        
+        super.viewWillAppear(animated)
+        print("Browser View will Appear")
+        authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        refetchAssets()
+        collectionView.reloadData()
         if fatherPicker.authStatus == .limited {
             authBtn.isHidden = false
             cancelBtn.isHidden = false
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("Browser View did Appear")
+    }
+    
     @objc func back() {
         dismiss(animated: true)
         fatherPicker.failReason = .userCancelled
@@ -74,7 +92,7 @@ class LibraryBrowserViewController: UICollectionViewController {
     func configureAuthBtn() {
         view.addSubview(authBtn)
         authBtn.translatesAutoresizingMaskIntoConstraints = false
-        authBtn.setTitle("相册访问被限制，点击更改相册访问权限", for: .normal)
+        authBtn.setTitle("相册访问被限制，点击选择更多照片", for: .normal)
         authBtn.setTitleColor(.black, for: .normal)
         authBtn.titleLabel?.lineBreakMode = .byCharWrapping
         authBtn.addTarget(self, action: #selector(requestAuth), for: .touchUpInside)
@@ -99,18 +117,20 @@ class LibraryBrowserViewController: UICollectionViewController {
     
     @objc func requestAuth() {
         print("req")
-//        PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { status in
-//            print(status.rawValue)
-//            self.fatherPicker.authStatus = status
-//            if status == .authorized {
-//                self.hideAuthBtn()
-//            }
-//            self.refetchAssets()
-//        })
+        
+        PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self) { identifiers in
+            self.refetchAssets()
+            self.collectionView.reloadData()
+        }
+        
     }
     @objc func hideAuthBtn() {
         authBtn.isHidden = true
         cancelBtn.isHidden = true
+    }
+    func showAuthBtn() {
+        authBtn.isHidden = false
+        cancelBtn.isHidden = false
     }
     func configureTableView() {
         view.addSubview(tableView)
@@ -237,6 +257,7 @@ extension LibraryBrowserViewController: UITableViewDelegate {
         btn.setTitle(name, for: .normal)
         tableView.isHidden = true
         nowIndexPath = indexPath
+        refetchAssets()
         collectionView.reloadData()
     }
 }

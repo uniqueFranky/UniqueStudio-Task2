@@ -41,10 +41,8 @@ class ImagePicker: UIViewController {
             print("!!Denied!!")
             failReason = .accessDenied
             callBack()
-        } else if authStatus == .limited {
-            print("Limited")
+            return
         }
-//        rootViewController.present(self, animated: true)
         if mode == .camera {
             takeFromCamera()
         } else {
