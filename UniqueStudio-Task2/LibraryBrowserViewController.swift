@@ -92,7 +92,7 @@ class LibraryBrowserViewController: UICollectionViewController {
     func configureAuthBtn() {
         view.addSubview(authBtn)
         authBtn.translatesAutoresizingMaskIntoConstraints = false
-        authBtn.setTitle("相册访问被限制，点击选择更多照片", for: .normal)
+        authBtn.setTitle("相册访问被限制，点击选择更多照片，或转到设置更新权限", for: .normal)
         authBtn.setTitleColor(.black, for: .normal)
         authBtn.titleLabel?.lineBreakMode = .byCharWrapping
         authBtn.addTarget(self, action: #selector(requestAuth), for: .touchUpInside)
