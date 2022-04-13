@@ -23,4 +23,5 @@
 ## 2022.4.13
  * presentLimitedLibraryPicker(from:)要import PhotosUI
  * 更改limited照片范围后可以刷新，但是第一次打开应用授权以后不能自动刷新
- * 还有一个问题，从图库获取的照片的清晰度比较低
+ * 从图库获取的照片的清晰度比较低，用opts.deliveryMode = .highQualityFormat解决了
+
