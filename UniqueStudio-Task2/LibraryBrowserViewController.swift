@@ -25,6 +25,7 @@ class LibraryBrowserViewController: UICollectionViewController {
             }
             refetchAssets()
             collectionView.reloadData()
+            tableView.reloadData()
         }
     }
     let tableView = UITableView()
@@ -196,13 +197,17 @@ extension LibraryBrowserViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = allPhotos.object(at: indexPath.item)
         let imageManager = PHImageManager()
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        imageManager.requestImage(for: asset, targetSize: CGSize(width: screenWidth, height: screenHeight), contentMode: .aspectFit, options: nil, resultHandler: { image, _ in
+        let opts = PHImageRequestOptions()
+        opts.deliveryMode = .highQualityFormat
+        opts.isSynchronous = true
+        opts.isNetworkAccessAllowed = true
+        opts.resizeMode = .exact
+        imageManager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: opts, resultHandler: { image, _ in
             guard let img = image else {
                 self.fatherPicker.failReason = .invalidImage
                 return
             }
+            print("!!!!!!!",img.size)
             if img.size.height < 100 || img.size.height < 100 {
                 self.fatherPicker.failReason = .invalidSize
                 return
