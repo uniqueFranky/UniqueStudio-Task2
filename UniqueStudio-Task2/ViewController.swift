@@ -26,7 +26,7 @@ class ViewController: UIViewController, UIActionSheetDelegate {
     
     func configureBarButtonItem() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(showSheet))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "显示选择的照片", style: .done, target: self, action: #selector(getImage))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "保存到相册", style: .done, target: self, action: #selector(saveImage))
     }
     
     func configureImageView() {
@@ -51,7 +51,7 @@ class ViewController: UIViewController, UIActionSheetDelegate {
         present(alertController, animated: true)
     }
 
-    @objc func getImage() {
+    func getImage() {
         do {
             try imageView.image = picker.retrieveImage()
         } catch {
@@ -59,8 +59,21 @@ class ViewController: UIViewController, UIActionSheetDelegate {
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             present(alert, animated: true)
         }
+        
     }
-    
+    @objc func saveImage() {
+        do {
+            try UIImageWriteToSavedPhotosAlbum(picker.retrieveImage(), nil, nil, nil)
+        } catch {
+            let alert = UIAlertController(title: "未能成功获取照片", message: "失败原因：\(error)", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            present(alert, animated: true)
+            return
+        }
+        let alert = UIAlertController(title: "保存成功", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        present(alert, animated: true)
+    }
     func pickFromLib(paramAction: UIAlertAction) {
         picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.photoLibrary, callBack: {
             self.getImage()

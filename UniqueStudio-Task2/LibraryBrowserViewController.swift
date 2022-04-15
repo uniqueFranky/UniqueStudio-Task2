@@ -265,9 +265,9 @@ extension LibraryBrowserViewController: UITableViewDelegate {
         btn.setTitle(name, for: .normal)
         tableView.isHidden = true
         nowIndexPath = indexPath
-        DispatchQueue.main.sync {
-            refetchAssets()
-            collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.refetchAssets()
+            self.collectionView.reloadData()
         }
 
     }
