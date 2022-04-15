@@ -24,14 +24,20 @@ class LibraryBrowserViewController: UICollectionViewController {
                 showAuthBtn()
             }
             refetchAssets()
-            collectionView.reloadData()
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.tableView.reloadData()
+            }
+            
         }
     }
     let tableView = UITableView()
     let btn = UIButton()
     let authBtn = UIButton()
     let cancelBtn = UIButton()
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,7 +63,11 @@ class LibraryBrowserViewController: UICollectionViewController {
         print("Browser View will Appear")
         authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         refetchAssets()
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            self.tableView.reloadData()
+        }
+        
         if fatherPicker.authStatus == .limited {
             authBtn.isHidden = false
             cancelBtn.isHidden = false
@@ -128,12 +138,18 @@ class LibraryBrowserViewController: UICollectionViewController {
         
     }
     @objc func hideAuthBtn() {
-        authBtn.isHidden = true
-        cancelBtn.isHidden = true
+        DispatchQueue.main.async {
+            self.authBtn.isHidden = true
+            self.cancelBtn.isHidden = true
+        }
+
     }
     func showAuthBtn() {
-        authBtn.isHidden = false
-        cancelBtn.isHidden = false
+        DispatchQueue.main.async {
+            self.authBtn.isHidden = false
+            self.cancelBtn.isHidden = false
+        }
+
     }
     func configureTableView() {
         view.addSubview(tableView)
@@ -297,8 +313,14 @@ extension LibraryBrowserViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         print("DidChange!")
         refetchAssets()
-        DispatchQueue.main.sync {
+        DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.tableView.reloadData()
+        }
+        if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized {
+            hideAuthBtn()
+        } else {
+            showAuthBtn()
         }
     }
 }

@@ -32,3 +32,4 @@
 ## 2022.4.15
  * 用PHPhotoLibraryChangeObserver实现了授权之后的自动刷新
  * 添加了保存到相册的功能
+ * 查资料发现，UIKit calls必须在main thread上，可以通过DispathQueue.main.async/sync实现
