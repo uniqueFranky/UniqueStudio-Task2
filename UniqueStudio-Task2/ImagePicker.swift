@@ -56,13 +56,6 @@ class ImagePicker: UIViewController {
     }
     
     func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
-//        DispatchQueue.main.async {
-//            PHAsset.fetchAssets(with: nil)
-//            PHCollectionList.fetchTopLevelUserCollections(with: nil)
-//        }
-//        DispatchQueue.main.async {
-//            self.settingUp(_rootViewController: _rootViewController, mode: mode, callBack: callBack)
-//        }
         rootViewController = _rootViewController
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self

@@ -207,10 +207,12 @@ extension LibraryBrowserViewController {
         imageManager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: opts, resultHandler: { image, _ in
             guard let img = image else {
                 self.fatherPicker.failReason = .invalidImage
+                self.fatherPicker.callBack()
                 return
             }
             if img.size.height < 100 || img.size.height < 100 {
                 self.fatherPicker.failReason = .invalidSize
+                self.fatherPicker.callBack()
                 return
             }
             self.fatherPicker.failReason = .noError
@@ -263,8 +265,11 @@ extension LibraryBrowserViewController: UITableViewDelegate {
         btn.setTitle(name, for: .normal)
         tableView.isHidden = true
         nowIndexPath = indexPath
-//        refetchAssets()
-//        collectionView.reloadData()
+        DispatchQueue.main.sync {
+            refetchAssets()
+            collectionView.reloadData()
+        }
+
     }
 }
 extension LibraryBrowserViewController: UITableViewDataSource {
@@ -292,7 +297,7 @@ extension LibraryBrowserViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         print("DidChange!")
         refetchAssets()
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             self.collectionView.reloadData()
         }
     }
