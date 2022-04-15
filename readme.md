@@ -31,3 +31,4 @@
 
 ## 2022.4.15
  * 用PHPhotoLibraryChangeObserver实现了授权之后的自动刷新
+ * 添加了保存到相册的功能
