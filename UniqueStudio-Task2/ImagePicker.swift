@@ -31,7 +31,38 @@ class ImagePicker: UIViewController {
         case accessDenied
     }
     
+    func requestAuth() {
+        PHAsset.fetchAssets(with: nil)
+        PHCollectionList.fetchTopLevelUserCollections(with: nil)
+    }
+    
+    func settingUp(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
+        rootViewController = _rootViewController
+        self.modalPresentationStyle = .fullScreen
+        uiImagePickerController.delegate = self
+        self.callBack = callBack
+        authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        if authStatus == .denied {
+            print("!!Denied!!")
+            failReason = .accessDenied
+            callBack()
+            return
+        }
+        if mode == .camera {
+            takeFromCamera()
+        } else {
+            pickFromLib()
+        }
+    }
+    
     func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
+//        DispatchQueue.main.async {
+//            PHAsset.fetchAssets(with: nil)
+//            PHCollectionList.fetchTopLevelUserCollections(with: nil)
+//        }
+//        DispatchQueue.main.async {
+//            self.settingUp(_rootViewController: _rootViewController, mode: mode, callBack: callBack)
+//        }
         rootViewController = _rootViewController
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self

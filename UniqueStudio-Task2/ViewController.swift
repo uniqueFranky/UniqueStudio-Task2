@@ -21,6 +21,7 @@ class ViewController: UIViewController, UIActionSheetDelegate {
         configureBarButtonItem()
         
         configureImageView()
+//        picker.requestAuth()
     }
     
     func configureBarButtonItem() {

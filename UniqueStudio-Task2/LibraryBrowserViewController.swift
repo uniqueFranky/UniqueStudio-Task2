@@ -36,6 +36,8 @@ class LibraryBrowserViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        PHPhotoLibrary.shared().register(self)
         view.backgroundColor = .white
         let option = PHFetchOptions()
         option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -207,7 +209,6 @@ extension LibraryBrowserViewController {
                 self.fatherPicker.failReason = .invalidImage
                 return
             }
-            print("!!!!!!!",img.size)
             if img.size.height < 100 || img.size.height < 100 {
                 self.fatherPicker.failReason = .invalidSize
                 return
@@ -262,8 +263,8 @@ extension LibraryBrowserViewController: UITableViewDelegate {
         btn.setTitle(name, for: .normal)
         tableView.isHidden = true
         nowIndexPath = indexPath
-        refetchAssets()
-        collectionView.reloadData()
+//        refetchAssets()
+//        collectionView.reloadData()
     }
 }
 extension LibraryBrowserViewController: UITableViewDataSource {
@@ -286,3 +287,21 @@ extension LibraryBrowserViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: 80, height: 80)
     }
 }
+
+extension LibraryBrowserViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        print("DidChange!")
+        refetchAssets()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+}
+
+//extension LibraryBrowserViewController: PHPhotoLibraryAvailabilityObserver {
+//    func photoLibraryDidBecomeUnavailable(_ photoLibrary: PHPhotoLibrary) {
+//        print("Did Change")
+//        refetchAssets()
+//        collectionView.reloadData()
+//    }
+//}

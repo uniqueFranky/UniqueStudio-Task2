@@ -25,3 +25,9 @@
  * 更改limited照片范围后可以刷新，但是第一次打开应用授权以后不能自动刷新
  * 从图库获取的照片的清晰度比较低，用opts.deliveryMode = .highQualityFormat解决了
 
+## 2022.4.14
+ * 可以通过在ViewController里先申请权限，但这样一打开app就会被要求授予相册权限，好像不太好
+ * 尝试用DispatQueue先请求权限，再加载CollectionView，但是好像请求权限在用户授权之前就会返回，失败。
+
+## 2022.4.15
+ * 用PHPhotoLibraryChangeObserver实现了授权之后的自动刷新
