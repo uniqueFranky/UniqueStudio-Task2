@@ -238,8 +238,8 @@ extension LibraryBrowserViewController {
             cvc.setPicker(self.fatherPicker)
             let navi = UINavigationController(rootViewController: cvc)
             navi.modalPresentationStyle = .fullScreen
-            self.dismiss(animated: true)
-            self.fatherPicker.rootViewController.present(navi, animated: true)
+//            self.dismiss(animated: true)
+            self.present(navi, animated: true)
         })
 
     }
