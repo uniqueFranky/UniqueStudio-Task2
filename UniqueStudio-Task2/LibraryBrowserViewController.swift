@@ -42,9 +42,10 @@ class LibraryBrowserViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+//        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+//        collectionView.backgroundColor = view.backgroundColor
+        view.backgroundColor = .lightGray
         PHPhotoLibrary.shared().register(self)
-        view.backgroundColor = .white
         let option = PHFetchOptions()
         option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         allPhotos = PHAsset.fetchAssets(with: option)
@@ -56,7 +57,7 @@ class LibraryBrowserViewController: UICollectionViewController {
         configureTableView()
         configureCollectionView()
         configureConstraints()
-        
+
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -74,10 +75,6 @@ class LibraryBrowserViewController: UICollectionViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("Browser View did Appear")
-    }
     
     @objc func back() {
         dismiss(animated: true)
@@ -153,6 +150,7 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     func configureTableView() {
         view.addSubview(tableView)
+        tableView.backgroundColor = view.backgroundColor
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TableViewCell")
@@ -165,7 +163,7 @@ class LibraryBrowserViewController: UICollectionViewController {
             btn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             btn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             btn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            btn.heightAnchor.constraint(equalToConstant: 50),
+            btn.heightAnchor.constraint(equalToConstant: 30),
             
             tableView.leadingAnchor.constraint(equalTo: btn.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: btn.trailingAnchor),
@@ -174,8 +172,8 @@ class LibraryBrowserViewController: UICollectionViewController {
             
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            collectionView.topAnchor.constraint(equalTo: btn.bottomAnchor, constant: 20),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            collectionView.topAnchor.constraint(equalTo: btn.bottomAnchor, constant: 10),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             authBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             authBtn.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 4 / 5),
@@ -191,6 +189,7 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     
     func configureCollectionView() {
+        collectionView.backgroundColor = view.backgroundColor
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -226,7 +225,7 @@ extension LibraryBrowserViewController {
                 self.fatherPicker.callBack()
                 return
             }
-            if img.size.height < 100 || img.size.height < 100 {
+            if self.fatherPicker.isValid(img) == false {
                 self.fatherPicker.failReason = .invalidSize
                 self.fatherPicker.callBack()
                 return
@@ -300,12 +299,13 @@ extension LibraryBrowserViewController: UITableViewDataSource {
         } else {
             cell.textLabel?.text = usrCollections.object(at: indexPath.item - 1).localizedTitle
         }
+        cell.backgroundColor = view.backgroundColor
         return cell
     }
 }
 extension LibraryBrowserViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            return CGSize(width: 80, height: 80)
+        return CGSize(width: UIScreen.main.bounds.width / 4 - 10, height: UIScreen.main.bounds.width / 4 - 10)
     }
 }
 

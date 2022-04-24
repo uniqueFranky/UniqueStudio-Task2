@@ -287,6 +287,8 @@
 				DEVELOPMENT_TEAM = LKMBDQA2QL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "UniqueStudio-Task2/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "拍照";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "读取照片";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -314,6 +316,8 @@
 				DEVELOPMENT_TEAM = LKMBDQA2QL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "UniqueStudio-Task2/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "拍照";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "读取照片";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

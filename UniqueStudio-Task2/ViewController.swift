@@ -76,13 +76,16 @@ class ViewController: UIViewController, UIActionSheetDelegate {
     func pickFromLib(paramAction: UIAlertAction) {
         picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.photoLibrary, callBack: {
             self.getImage()
-        })
+        }, isValid: isValidImage)
     }
     func takeFromCamera(paramAction: UIAlertAction) {
         picker.setup(_rootViewController: self, mode: UIImagePickerController.SourceType.camera, callBack: {
             self.getImage()
-        })
+        }, isValid: isValidImage)
     }
     
 }
 
+func isValidImage(image: UIImage) -> Bool {
+    return true
+}

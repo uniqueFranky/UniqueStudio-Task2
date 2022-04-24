@@ -19,6 +19,9 @@ class ImagePicker: UIViewController {
     var callBack: () -> Void = {
         
     }
+    var isValid: (_ toJudge: UIImage) -> Bool = { toJudge in
+        return true
+    }
     enum PickingError: Error {
         case noError
         case cameraNotAvailable
@@ -55,11 +58,12 @@ class ImagePicker: UIViewController {
         }
     }
     
-    func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void) {
+    func setup(_rootViewController: UIViewController, mode: UIImagePickerController.SourceType, callBack: @escaping () -> Void, isValid: @escaping (_ toJudge: UIImage) -> Bool) {
         rootViewController = _rootViewController
         self.modalPresentationStyle = .fullScreen
         uiImagePickerController.delegate = self
         self.callBack = callBack
+        self.isValid = isValid
         authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         if authStatus == .denied {
             print("!!Denied!!")
@@ -86,7 +90,10 @@ class ImagePicker: UIViewController {
         }
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 80, height: 80)
+        layout.itemSize = CGSize(width:  UIScreen.main.bounds.width / 4 - 5, height:  UIScreen.main.bounds.width / 4 - 5)
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
         let lbvc = LibraryBrowserViewController(collectionViewLayout: layout)
         lbvc.setPicker(picker: self)
         let navi = UINavigationController(rootViewController: lbvc)
