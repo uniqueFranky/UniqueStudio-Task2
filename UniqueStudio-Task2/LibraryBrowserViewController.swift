@@ -178,8 +178,8 @@ class LibraryBrowserViewController: UICollectionViewController {
             
             authBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             authBtn.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 4 / 5),
-            authBtn.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -30),
-            authBtn.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            authBtn.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -50),
+            authBtn.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
             
             cancelBtn.leadingAnchor.constraint(equalTo: authBtn.trailingAnchor),
             cancelBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
