@@ -108,7 +108,8 @@ class LibraryBrowserViewController: UICollectionViewController {
         authBtn.addTarget(self, action: #selector(requestAuth), for: .touchUpInside)
     }
     func configureBtn() {
-        view.addSubview(btn)
+//        view.addSubview(btn)
+        navigationItem.titleView = btn
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("所有照片", for: .normal)
         btn.setTitleColor(.black, for: .normal)
@@ -160,19 +161,19 @@ class LibraryBrowserViewController: UICollectionViewController {
     
     func configureConstraints() {
         let constraints = [
-            btn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            btn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            btn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            btn.heightAnchor.constraint(equalToConstant: 30),
+//            btn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+//            btn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+//            btn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+//            btn.heightAnchor.constraint(equalToConstant: 30),
             
-            tableView.leadingAnchor.constraint(equalTo: btn.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: btn.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: btn.bottomAnchor, constant: 10),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
             
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            collectionView.topAnchor.constraint(equalTo: btn.bottomAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             authBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
