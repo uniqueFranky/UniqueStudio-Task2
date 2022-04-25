@@ -108,11 +108,12 @@ class LibraryBrowserViewController: UICollectionViewController {
         authBtn.addTarget(self, action: #selector(requestAuth), for: .touchUpInside)
     }
     func configureBtn() {
-//        view.addSubview(btn)
         navigationItem.titleView = btn
+        btn.semanticContentAttribute = .forceRightToLeft
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("所有照片", for: .normal)
         btn.setTitleColor(.black, for: .normal)
+        btn.setImage(UIImage(systemName: "arrow.right.circle"), for: .normal)
         btn.addTarget(self, action: #selector(dropDown), for: .touchUpInside)
     }
     func configureCancelBtn() {
@@ -124,6 +125,12 @@ class LibraryBrowserViewController: UICollectionViewController {
     
     @objc func dropDown() {
         tableView.isHidden = !tableView.isHidden
+        UIView.animate(withDuration: 0.3) {
+            if let imageView = self.btn.imageView {
+                imageView.transform = imageView.transform.rotated(by: self.tableView.isHidden ? -.pi / 2 : .pi / 2)
+            }
+
+        }
     }
     
     @objc func requestAuth() {
@@ -238,7 +245,6 @@ extension LibraryBrowserViewController {
             cvc.setPicker(self.fatherPicker)
             let navi = UINavigationController(rootViewController: cvc)
             navi.modalPresentationStyle = .fullScreen
-//            self.dismiss(animated: true)
             self.present(navi, animated: true)
         })
 
@@ -278,10 +284,12 @@ extension LibraryBrowserViewController: UITableViewDelegate {
         } else {
             name = usrCollections.object(at: indexPath.item - 1).localizedTitle
         }
-        btn.setTitle(name, for: .normal)
-        tableView.isHidden = true
+       
+        
         nowIndexPath = indexPath
         DispatchQueue.main.async {
+            self.dropDown()
+            self.btn.setTitle(name, for: .normal)
             self.refetchAssets()
             self.collectionView.reloadData()
         }
@@ -301,6 +309,7 @@ extension LibraryBrowserViewController: UITableViewDataSource {
             cell.textLabel?.text = usrCollections.object(at: indexPath.item - 1).localizedTitle
         }
         cell.backgroundColor = view.backgroundColor
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
 }
