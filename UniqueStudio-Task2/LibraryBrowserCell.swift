@@ -20,19 +20,13 @@ class LibraryBrowserCell: UICollectionViewCell {
         self.imageView.layer.borderWidth = 5.0
         self.imageView.layer.borderColor = UIColor.clear.cgColor
         self.imageView.layer.masksToBounds = true
-        clipsToBounds = true
         
-        self.contentView.layer.cornerRadius = 15.0
-        self.contentView.layer.borderWidth = 5.0
-        self.contentView.layer.borderColor = UIColor.clear.cgColor
-        self.contentView.layer.masksToBounds = true
-        self.layer.shadowColor = UIColor.white.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 0.0)
-        self.layer.shadowRadius = 6.0
-        self.layer.shadowOpacity = 0.6
-        self.layer.cornerRadius = 15.0
-        self.layer.masksToBounds = false
-        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.layer.cornerRadius).cgPath
+        clipsToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 1
+        layer.shadowOffset = CGSize.zero
+        layer.shadowRadius = 4
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 10).cgPath
     }
     let imageView = UIImageView()
     func configureImageView() {

@@ -193,9 +193,9 @@ class LibraryBrowserViewController: UICollectionViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -0),
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -0),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             authBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -213,8 +213,8 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     
     func configureCollectionView() {
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         collectionView.backgroundColor = view.backgroundColor
-        print(collectionView.backgroundColor)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
