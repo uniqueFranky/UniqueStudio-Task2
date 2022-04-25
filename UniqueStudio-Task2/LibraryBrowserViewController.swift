@@ -16,6 +16,8 @@ class LibraryBrowserViewController: UICollectionViewController {
     var usrCollectionPhotos: PHFetchResult<PHAsset>!
     var usrCollections: PHFetchResult<PHCollection>!
     var nowIndexPath: IndexPath!
+    var tableViewBottomConstraint: NSLayoutConstraint!
+    var isTableHidden: Bool!
     var authStatus: PHAuthorizationStatus! {
         didSet {
             if authStatus == .authorized {
@@ -44,6 +46,7 @@ class LibraryBrowserViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
 //        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
 //        collectionView.backgroundColor = view.backgroundColor
+        tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: tableView.topAnchor)
         view.backgroundColor = .lightGray
         PHPhotoLibrary.shared().register(self)
         let option = PHFetchOptions()
@@ -124,12 +127,25 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     
     @objc func dropDown() {
-        tableView.isHidden = !tableView.isHidden
+        isTableHidden = !isTableHidden
         UIView.animate(withDuration: 0.3) {
             if let imageView = self.btn.imageView {
-                imageView.transform = imageView.transform.rotated(by: self.tableView.isHidden ? -.pi / 2 : .pi / 2)
+                imageView.transform = imageView.transform.rotated(by: self.isTableHidden ? -.pi / 2 : .pi / 2)
             }
-
+        }
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveLinear]) {
+            self.tableViewBottomConstraint.isActive = false
+            
+            if self.isTableHidden {
+                
+                self.tableViewBottomConstraint = self.tableView.bottomAnchor.constraint(equalTo: self.tableView.topAnchor)
+            } else {
+                
+                self.tableViewBottomConstraint = self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -UIScreen.main.bounds.height / 5)
+            }
+            
+            self.tableViewBottomConstraint.isActive = true
+            self.view.layoutIfNeeded()
         }
     }
     
@@ -158,12 +174,14 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     func configureTableView() {
         view.addSubview(tableView)
-        tableView.backgroundColor = view.backgroundColor
+        isTableHidden = true
+        tableView.backgroundColor = .darkGray
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.isHidden = true
+        tableView.layer.cornerRadius = 20
+//        tableView.isHidden = true
     }
     
     func configureConstraints() {
@@ -173,10 +191,9 @@ class LibraryBrowserViewController: UICollectionViewController {
 //            btn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
 //            btn.heightAnchor.constraint(equalToConstant: 30),
             
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -0),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -194,6 +211,7 @@ class LibraryBrowserViewController: UICollectionViewController {
             cancelBtn.bottomAnchor.constraint(equalTo: authBtn.bottomAnchor),
         ]
         view.addConstraints(constraints)
+        tableViewBottomConstraint.isActive = true
     }
     
     func configureCollectionView() {
@@ -308,7 +326,7 @@ extension LibraryBrowserViewController: UITableViewDataSource {
         } else {
             cell.textLabel?.text = usrCollections.object(at: indexPath.item - 1).localizedTitle
         }
-        cell.backgroundColor = view.backgroundColor
+        cell.backgroundColor = tableView.backgroundColor
         cell.accessoryType = .disclosureIndicator
         return cell
     }
