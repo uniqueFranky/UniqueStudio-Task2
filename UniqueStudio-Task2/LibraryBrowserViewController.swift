@@ -30,7 +30,6 @@ class LibraryBrowserViewController: UICollectionViewController {
                 self.collectionView.reloadData()
                 self.tableView.reloadData()
             }
-            
         }
     }
     let tableView = UITableView()
@@ -44,8 +43,7 @@ class LibraryBrowserViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-//        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
-//        collectionView.backgroundColor = view.backgroundColor
+        
         tableViewBottomConstraint = tableView.bottomAnchor.constraint(equalTo: tableView.topAnchor)
         view.backgroundColor = .lightGray
         PHPhotoLibrary.shared().register(self)
@@ -216,6 +214,7 @@ class LibraryBrowserViewController: UICollectionViewController {
     
     func configureCollectionView() {
         collectionView.backgroundColor = view.backgroundColor
+        print(collectionView.backgroundColor)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -352,11 +351,3 @@ extension LibraryBrowserViewController: PHPhotoLibraryChangeObserver {
         }
     }
 }
-
-//extension LibraryBrowserViewController: PHPhotoLibraryAvailabilityObserver {
-//    func photoLibraryDidBecomeUnavailable(_ photoLibrary: PHPhotoLibrary) {
-//        print("Did Change")
-//        refetchAssets()
-//        collectionView.reloadData()
-//    }
-//}
