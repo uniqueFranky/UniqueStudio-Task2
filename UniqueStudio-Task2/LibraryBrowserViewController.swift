@@ -116,6 +116,7 @@ class LibraryBrowserViewController: UICollectionViewController {
         btn.setTitleColor(.black, for: .normal)
         btn.setImage(UIImage(systemName: "arrow.right.circle"), for: .normal)
         btn.addTarget(self, action: #selector(dropDown), for: .touchUpInside)
+        btn.tintColor = .black
     }
     func configureCancelBtn() {
         view.addSubview(cancelBtn)
@@ -148,7 +149,6 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     
     @objc func requestAuth() {
-        print("req")
         
         PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self) { identifiers in
             self.refetchAssets()
@@ -176,9 +176,11 @@ class LibraryBrowserViewController: UICollectionViewController {
         tableView.backgroundColor = .darkGray
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TableViewCell")
+        tableView.register(LibraryCell.self, forCellReuseIdentifier: "TableViewCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.layer.cornerRadius = 20
+        tableView.rowHeight = 60
+        
 //        tableView.isHidden = true
     }
     
@@ -231,109 +233,6 @@ class LibraryBrowserViewController: UICollectionViewController {
     }
     */
 
-}
-
-
-//MARK: CollectionViewDelegate
-extension LibraryBrowserViewController {
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let asset = allPhotos.object(at: indexPath.item)
-        let imageManager = PHImageManager()
-        let opts = PHImageRequestOptions()
-        opts.deliveryMode = .highQualityFormat
-        opts.isSynchronous = true
-        opts.isNetworkAccessAllowed = true
-        opts.resizeMode = .exact
-        imageManager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: opts, resultHandler: { image, _ in
-            guard let img = image else {
-                self.fatherPicker.failReason = .invalidImage
-                self.fatherPicker.callBack()
-                return
-            }
-            if self.fatherPicker.isValid(img) == false {
-                self.fatherPicker.failReason = .invalidSize
-                self.fatherPicker.callBack()
-                return
-            }
-            self.fatherPicker.failReason = .noError
-            self.fatherPicker.image = img
-            let cvc = CropViewController()
-            cvc.setupImageView(image: self.fatherPicker.image)
-            cvc.setPicker(self.fatherPicker)
-            let navi = UINavigationController(rootViewController: cvc)
-            navi.modalPresentationStyle = .fullScreen
-            self.present(navi, animated: true)
-        })
-
-    }
-}
-
-//MARK: CollectionViewDataSource
-extension LibraryBrowserViewController {
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        refetchAssets()
-        return allPhotos.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("cellForItem", indexPath.item)
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as? LibraryBrowserCell else {
-            fatalError()
-        }
-        let asset = allPhotos.object(at: indexPath.item)
-        let imageManager = PHImageManager()
-        let screenWidth = UIScreen.main.bounds.width
-        imageManager.requestImage(for: asset, targetSize: CGSize(width: screenWidth, height: screenWidth), contentMode: .aspectFit, options: nil, resultHandler: { image, _ in
-                cell.imageView.image = image
-        })
-        return cell
-    }
-    
-    
-}
-
-extension LibraryBrowserViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        var name: String?
-        if indexPath.item == 0 {
-            name = "所有照片"
-        } else {
-            name = usrCollections.object(at: indexPath.item - 1).localizedTitle
-        }
-       
-        
-        nowIndexPath = indexPath
-        DispatchQueue.main.async {
-            self.dropDown()
-            self.btn.setTitle(name, for: .normal)
-            self.refetchAssets()
-            self.collectionView.reloadData()
-        }
-
-    }
-}
-extension LibraryBrowserViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1 + usrCollections.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
-        if indexPath.item == 0 {
-            cell.textLabel?.text = "所有照片"
-        } else {
-            cell.textLabel?.text = usrCollections.object(at: indexPath.item - 1).localizedTitle
-        }
-        cell.backgroundColor = tableView.backgroundColor
-        cell.accessoryType = .disclosureIndicator
-        return cell
-    }
-}
-extension LibraryBrowserViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width / 4 - 10, height: UIScreen.main.bounds.width / 4 - 10)
-    }
 }
 
 extension LibraryBrowserViewController: PHPhotoLibraryChangeObserver {

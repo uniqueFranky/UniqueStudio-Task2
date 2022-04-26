@@ -21,7 +21,7 @@ class LibraryBrowserCell: UICollectionViewCell {
         self.imageView.layer.borderColor = UIColor.clear.cgColor
         self.imageView.layer.masksToBounds = true
         
-        clipsToBounds = false
+        clipsToBounds = true
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 1
         layer.shadowOffset = CGSize.zero
